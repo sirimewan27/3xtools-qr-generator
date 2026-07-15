@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3xtools QR Suite - Documentation</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --sidebar-width: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      display: flex;
+      min-h: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: var(--sidebar-width);
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      z-index: 50;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+    }
+
+    .brand-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #0f172a;
+    }
+
+    .brand-name span {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .sidebar-menu {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .sidebar-menu a:hover {
+      background-color: var(--bg-main);
+      color: var(--primary);
+      transform: translateX(3px);
+    }
+
+    .sidebar-menu li.active a {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Main Content Area */
+    main {
+      margin-left: var(--sidebar-width);
+      flex-grow: 1;
+      padding: 3.5rem 5rem;
+      max-width: 1100px;
+    }
+
+    header {
+      margin-bottom: 3.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 2rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    section {
+      margin-bottom: 4.5rem;
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1.25rem;
+      padding-top: 1rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--text-main);
+      font-size: 0.975rem;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    strong {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .feature-title {
+      font-weight: 750;
+      font-size: 1rem;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-title::before {
+      content: "✦";
+      color: var(--primary);
+    }
+
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Code Blocks */
+    .code-container {
+      background-color: var(--code-bg);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 0.5rem;
+    }
+
+    .code-title {
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    pre {
+      margin: 0;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+      color: var(--code-text);
+    }
+
+    .inline-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* Alerts / Callouts */
+    .alert {
+      display: flex;
+      gap: 1rem;
+      background-color: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .alert-icon {
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+
+    .alert-content p {
+      margin: 0;
+      font-size: 0.925rem;
+      color: #3730a3;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background-color: #ecfdf5;
+      border-left-color: var(--success);
+    }
+
+    .alert-success .alert-content p {
+      color: #065f46;
+    }
+
+    .alert-warning {
+      background-color: #fffbeb;
+      border-left-color: var(--warning);
+    }
+
+    .alert-warning .alert-content p {
+      color: #92400e;
+    }
+
+    /* Installation Steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      shrink: 0;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
+    }
+
+    .step-body h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      color: #0f172a;
+      margin-bottom: 0.35rem;
+    }
+
+    .step-body p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Rebranding Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    th, td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    /* Footer styling */
+    .docs-footer {
+      border-t: 1px solid var(--border-color);
+      margin-top: 5rem;
+      padding-top: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 900px) {
+      aside {
+        display: none;
+      }
+      main {
+        margin-left: 0;
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <a href="#" class="brand-logo">
+      <div class="logo-icon">QR</div>
+      <div class="brand-name">3xtools <span>QR Suite</span></div>
+    </a>
+    
+    <ul class="sidebar-menu">
+      <li class="active"><a href="#overview">Overview</a></li>
+      <li><a href="#features">Key Features</a></li>
+      <li><a href="#setup">Local Setup</a></li>
+      <li><a href="#rebranding">Rebranding Guide</a></li>
+      <li><a href="#build-deploy">Build & Deploy</a></li>
+      <li><a href="#structure">File Structure</a></li>
+      <li><a href="#faq">Troubleshooting</a></li>
+      <li><a href="#support">Support & Help</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main>
+    <header>
+      <h1>3xtools QR Suite - Documentation</h1>
+      <p class="subtitle">Complete guide to running, configuring, and rebranding the premium offline QR designer template.</p>
+    </header>
+
+    <!-- 1. Overview -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>
+        The <strong>3xtools QR Suite</strong> is a premium, realtime, vector QR Code generator and styling engine built on React 19, Vite, and Tailwind CSS v4. Designed for ultimate privacy and visual excellence, the application performs all calculations, pattern overrides, frame drawings, and bulk ZIP compressions <strong>completely client-side</strong>. 
+      </p>
+      <p>
+        It requires no backend database, no third-party APIs, and no server maintenance. This makes it incredibly easy to rebrand, configure, and upload to any hosting provider.
+      </p>
+      
+      <div class="alert alert-success">
+        <div class="alert-icon">💡</div>
+        <div class="alert-content">
+          <p><strong>Zero server maintenance:</strong> Since the suite runs strictly in the buyer's browser, you can host it for free on Vercel, Netlify, Cloudflare Pages, or drag-and-drop the pre-built files onto shared cPanel hosting!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Key Features -->
+    <section id="features">
+      <h2>Key Features</h2>
+      <p>The application is packed with high-value developer and consumer features that guarantee high user retention:</p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-title">Data Modes</div>
+          <div class="feature-desc">Interactive inputs for links, plain text, email, phone, SMS, WhatsApp pre-fills, Wi-Fi details, vCards, Geo locations, and iCalendar events.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Advanced Styles</div>
+          <div class="feature-desc">Customize data pixel patterns (dots, rounded, diamonds, liquid, lines) and corner locator eye borders and pupil dots dynamically.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Premium Frames</div>
+          <div class="feature-desc">Banners, top/bottom ribbons, phone mockups, border tags, and film clapperboards with customizable typography, sizing, and colors.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Bulk Generation</div>
+          <div class="feature-desc">Drag and drop CSV files or write lists. Renders paginated previews dynamically and downloads all codes bundled inside a zip file client-side!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Local Setup -->
+    <section id="setup">
+      <h2>Local Development Setup</h2>
+      <p>Follow these steps to run the application in a local development environment:</p>
+      
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Extract Code Package</h3>
+            <p>Unzip the downloaded CodeCanyon package and locate the <code>Source Code/</code> folder which contains the React + Vite repository.</p>
+          </div>
+        </div>
+        
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Install Node.js Dependencies</h3>
+            <p>Open your terminal/command prompt in the project root directory and run the following command to download dependencies:</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title">Terminal / Command Line</span>
+              </div>
+              <pre><code>npm install</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Start Local Development Server</h3>
+            <p>Spin up Vite's HMR local development server by executing:</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title">Terminal / Command Line</span>
+              </div>
+              <pre><code>npm run dev</code></pre>
+            </div>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">Open your browser and navigate to the address shown in terminal (typically <code class="inline-code">http://localhost:5173</code>).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Rebranding Guide -->
+    <section id="rebranding">
+      <h2>Rebranding & Configuration Guide</h2>
+      <p>
+        The entire application is rebranded via a single central settings file. You do not need to rewrite any React components to change branding tags, logos, colors, support emails, or buy-me-a-coffee links.
+      </p>
+      <p>
+        Open the file <code class="inline-code">src/config.js</code> in your code editor and edit the following values:
+      </p>
+
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">src/config.js</span>
+        </div>
+        <pre><code>export const CONFIG = {
+  // Brand Configuration
+  brand: {
+    title: '3xtools QR Suite',
+    logoText: '3xtools',
+    subText: 'QR Suite',
+    tagline: 'Realtime Premium Offline QR Suite',
+  },
+
+  // Support & Donations
+  support: {
+    email: 'support@3xtools.app',
+    coffeeUrl: 'https://buymeacoffee.com/3xtools',
+    coffeeHeading: 'Enjoying our free tools?',
+    coffeeSub: 'Keep our premium suite 100% private, clean, and free of ads.',
+  },
+
+  // UI Theme Colors (Flat Solid Styles)
+  theme: {
+    primary: '#4f46e5',      // Light mode Primary Brand Color
+    primaryHover: '#4338ca', // Light mode Hover state
+    primaryBadge: '#e0e7ff', // Light mode Accent background
+
+    primaryDark: '#818cf8',      // Dark mode Accent Accent
+    primaryDarkHover: '#6366f1', // Dark mode Hover state
+    primaryBadgeDark: 'rgba(99, 102, 241, 0.15)',
+  },
+  
+  // Default QR Customizations on load
+  qrDefaults: {
+    bgColor: '#ffffff',
+    fgColor: '#000000',
+    margin: 4,
+    ecLevel: 'M',
+    pattern: 'squares',
+    eyeStyle: 'squares',
+    eyeCenter: 'squares',
+    frameStyle: 'no-frame',
+    frameText: 'SCAN ME',
+    frameFont: 'Outfit',
+    frameTextSize: 100,
+    frameColor: '#4f46e5',
+    frameTextColor: '#ffffff',
+  },
+  
+  // Portfolio links to your other utilities
+  otherTools: [
+    {
+      title: 'Image Optimizer',
+      desc: 'Compress, scale, and convert PNG, JPEG, and WEBP...',
+      url: 'https://3xtools.app/image-optimizer',
+      badge: 'Client-side'
+    },
+    ...
+  ]
+};</code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Setting Path</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CONFIG.brand.title</strong></td>
+            <td>"3xtools QR Suite"</td>
+            <td>The meta title and general tab header of the application.</td>
+          </tr>
+          <tr>
+            <td><strong>CONFIG.brand.logoText</strong></td>
+            <td>"3xtools"</td>
+            <td>The primary bold logo text in the header and footer.</td>
+          </tr>
+          <tr>
+            <td><strong>CONFIG.brand.subText</strong></td>
+            <td>"QR Suite"</td>
+            <td>Secondary light text next to the main logo.</td>
+          </tr>
+          <tr>
+            <td><strong>CONFIG.support.email</strong></td>
+            <td>"support@3xtools.app"</td>
+            <td>E-mail address for support and footer support links.</td>
+          </tr>
+          <tr>
+            <td><strong>CONFIG.theme.primary</strong></td>
+            <td>"#4f46e5"</td>
+            <td>The primary brand color injected programmatically as active UI buttons, badges, and accents.</td>
+          </tr>
+          <tr>
+            <td><strong>CONFIG.qrDefaults</strong></td>
+            <td>(Style configuration)</td>
+            <td>Pre-defined states of the QR code layout whenever a user lands on your site.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 5. Build & Deploy -->
+    <section id="build-deploy">
+      <h2>Build & Deploy for Production</h2>
+      <p>To compile the optimized, compressed static code ready to run on any online hosting environment, run:</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">Terminal / Command Line</span>
+        </div>
+        <pre><code>npm run build</code></pre>
+      </div>
+
+      <p>
+        Vite will build and output an optimized production bundle inside the <code>dist/</code> folder. This folder contains a single <code>index.html</code> alongside compiled, obfuscated <code>assets/</code> (js, css) and static media files.
+      </p>
+
+      <div class="alert alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <p><strong>cPanel Shared Hosting note:</strong> Simply drag the files <strong>inside</strong> the built <code>dist/</code> folder (not the folder itself) and drop them inside your domain's root folder (usually <code>public_html/</code>) using cPanel File Manager or FTP, and your site is live immediately!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. File Structure -->
+    <section id="structure">
+      <h2>File Structure</h2>
+      <p>A breakdown of the project directories. The modular system segregates components from layout views to guarantee fast rendering:</p>
+      
+      <div class="code-container">
+        <div class="code-header">
+          <span class="code-title">Directory Tree Diagram</span>
+        </div>
+        <pre><code>📁 qr-code-generator/
+├── 📁 public/                   # Static assets (favicons, manifest files)
+├── 📁 src/
+│   ├── 📁 components/           # Extracted Reusable Layout Components
+│   │   ├── 📄 Navbar.jsx        # Responsive navigation drawer & theme toggles
+│   │   ├── 📄 Footer.jsx        # Footer & Buy-Me-A-Coffee promotion cards
+│   │   └── 📄 CoffeeModal.jsx   # Download success modal overlays
+│   ├── 📁 pages/                # Independent Layout Views
+│   │   ├── 📄 FAQPage.jsx       # Custom expandable accordion lists
+│   │   ├── 📄 HelpPage.jsx      # Technical support guidelines grids
+│   │   └── 📄 ToolsPage.jsx     # Utilities portfolio layouts
+│   ├── 📄 App.jsx               # Main Workspace, forms, state, & drawing engines
+│   ├── 📄 config.js             # Centralized Brand & Color properties config
+│   ├── 📄 index.css             # Main styling, Tailwind CSS directives
+│   └── 📄 main.jsx              # React mounting root
+├── 📄 index.html                # Main index card, custom Google Fonts
+├── 📄 package.json              # Directives & NPM dependencies keys
+└── 📄 vite.config.js            # Build compilations directives config</code></pre>
+      </div>
+    </section>
+
+    <!-- 7. Troubleshooting -->
+    <section id="faq">
+      <h2>Troubleshooting & FAQs</h2>
+      
+      <p><strong>Q: What should I do if the built page displays a blank screen?</strong><br>
+      A: Open your browser's console (F12) to inspect errors. Most blank screens on cPanel are caused by server directory routing issues. If you host inside a subdirectory (e.g. <code>example.com/qr/</code>), open <code>vite.config.js</code> and configure the base parameter: <code class="inline-code">base: './'</code> or <code class="inline-code">base: '/qr/'</code>, and compile again.</p>
+      
+      <p><strong>Q: The Bulk ZIP download does not run?</strong><br>
+      A: The bulk ZIP compilation uses <code>JSZip</code> completely client-side in the browser's RAM memory. If buyers upload extremely large CSV files (e.g. 10,000 rows), the browser might hit heap memory limits. Advise buyers to split files into smaller batches of 1,000 rows to ensure fast Zip compression.</p>
+
+      <p><strong>Q: Can I integrate ads (like Google AdSense) on this template?</strong><br>
+      A: Yes, easily! You can add Google AdSense scripts inside the <code>index.html</code> file or add styled banner components inside `Navbar` or `Footer` containers.</p>
+    </section>
+
+    <!-- 8. Support -->
+    <section id="support">
+      <h2>Support & Help Center</h2>
+      <p>
+        If you have questions, require custom feature integrations, or need setup assistance, please do not hesitate to contact our developer team at:
+      </p>
+      <div class="alert" style="background-color: #f1f5f9; border-left-color: #475569;">
+        <div class="alert-icon">✉️</div>
+        <div class="alert-content">
+          <p style="color: #334155;"><strong>Support Email:</strong> <a href="mailto:support@3xtools.app" style="color: var(--primary); text-decoration: none; font-weight: 600;">support@3xtools.app</a></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="docs-footer">
+      <p>© 3xtools Product Documentation. Designed for absolute visual excellence & flat solid styles.</p>
+    </div>
+  </main>
+
+  <script>
+    // Simple interactive scroll active list tracking
+    window.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const id = entry.target.getAttribute('id');
+          if (entry.intersectionRatio > 0.3) {
+            document.querySelectorAll('aside ul li').forEach(li => li.classList.remove('active'));
+            const activeLi = Array.from(document.querySelectorAll('aside ul li')).find(li => {
+              return li.querySelector('a').getAttribute('href') === `#${id}`;
+            });
+            if (activeLi) activeLi.classList.add('active');
+          }
+        });
+      }, { threshold: [0.1, 0.3, 0.5, 0.7] });
+
+      document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>

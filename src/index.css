@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+  --font-abril: "Abril Fatface", serif;
+  --font-inter: "Inter", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+  
+  /* Map Tailwind CSS v4 indigo palette directly to dynamic CSS properties from config.js */
+  --color-indigo-50: var(--primary-badge);
+  --color-indigo-100: var(--primary-badge);
+  --color-indigo-400: var(--primary-dark);
+  --color-indigo-500: var(--primary-color);
+  --color-indigo-600: var(--primary-color);
+  --color-indigo-650: var(--primary-color);
+  --color-indigo-700: var(--primary-hover);
+  --color-indigo-750: var(--primary-hover);
+  --color-indigo-800: var(--primary-hover);
+  --color-indigo-950: var(--primary-badge-dark);
+}
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-badge: #e0e7ff;
+  
+  --primary-dark: #818cf8;
+  --primary-dark-hover: #6366f1;
+  --primary-badge-dark: rgba(99, 102, 241, 0.15);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 dark:bg-zinc-950 transition-colors duration-300 text-slate-800 dark:text-zinc-200 antialiased font-sans;
+  }
+}
