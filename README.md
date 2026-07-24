@@ -6,13 +6,16 @@ All compiling and rendering execute locally inside browser memory — zero serve
 
 ---
 
-## 📸 Screenshots
+## 📸 Real Application Screenshots
 
-### QR Code Designer Workspace
-![3XTOOLS QR Code Designer](./public/screenshots/qr_designer_preview.png)
+### QR Code Designer Workspace (Light Mode)
+![3XTOOLS QR Code Designer Light Mode](./public/screenshots/qr_designer_light.png)
+
+### QR Code Designer Workspace (Dark Mode)
+![3XTOOLS QR Code Designer Dark Mode](./public/screenshots/qr_designer_dark.png)
 
 ### Bulk QR Batch Exporter
-![3XTOOLS Bulk QR Generator](./public/screenshots/qr_bulk_preview.png)
+![3XTOOLS Bulk QR Generator](./public/screenshots/qr_bulk_generator.png)
 
 ---
 
@@ -24,7 +27,7 @@ All compiling and rendering execute locally inside browser memory — zero serve
 | **🎨 Custom Module Patterns** | Choose from 10+ module shapes including Squares, Dots, Small Dots, Rounded, Diamonds, Hearts, Stars, Liquid, Horizontal Lines, and Vertical Lines. |
 | **👁️ Eye Border & Pupil Customization** | Customize outer locator borders (Squares, Rounded, Circle, Leaf, Shield, Flower) and inner pupils (Dots, Leaves, Diamonds, Hearts, Stars, Plus). |
 | **🖼️ Frame Wrappers** | Wrap QR codes with custom CTA banners ("SCAN ME", "CONNECT WI-FI", "DRINK & ENJOY"), bottom accents, ribbon frames, clapperboards, or smartphone mockups with custom font styles & colors. |
-| **🎨 Color Palette Controls** | Full background & foreground color picker with support for independent eye border & pupil colors. |
+| **🎨 Color Palette Controls** | Full background & foreground custom ColorPicker swatches with independent eye border & pupil color controls. |
 | **📦 Bulk Batch Generation** | Upload `.csv` files or paste data line-by-line. Map payload data and custom filenames, render batch previews, and download all generated QR codes as a `.zip` archive. |
 | **💾 Export Formats** | High-resolution PNG image download & loss-free vector SVG export. |
 
