@@ -7,7 +7,6 @@ import Footer from './components/Footer';
 import CoffeeModal from './components/CoffeeModal';
 import FAQPage from './pages/FAQPage';
 import HelpPage from './pages/HelpPage';
-import ToolsPage from './pages/ToolsPage';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -15,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
+import { ColorPicker } from "@/components/ui/color-picker";
 import {
   Link as LinkIcon,
   FileText,
@@ -556,23 +557,29 @@ function BulkQrCard({
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-zinc-950/70 border border-slate-200/50 dark:border-zinc-800/80 rounded-2xl p-4 flex flex-col items-center justify-between text-center gap-3 transition-all hover:shadow-md hover:border-slate-350 dark:hover:border-zinc-700/80 shadow-xs relative">
-      <div className="w-full text-slate-800 dark:text-zinc-200 text-xs font-bold truncate max-w-full px-1" title={item.label}>
-        #{index + 1} - {item.label || 'QR Item'}
+    <Card className="border-border bg-card shadow-sm flex flex-col items-center justify-between text-center gap-3 p-4">
+      <div className="w-full text-foreground text-xs font-bold truncate max-w-full px-1" title={item.label}>
+        {item.label}
       </div>
-      <div className="bg-white p-2.5 rounded-xl flex items-center justify-center shadow-inner relative max-w-full overflow-hidden">
-        <canvas ref={canvasRef} id={`bulk-canvas-${index}`} className="w-32 h-auto max-h-32 rounded-lg"></canvas>
+
+      <div className="p-2 bg-white rounded-lg border border-border shadow-xs flex items-center justify-center max-w-full overflow-hidden w-full aspect-square">
+        <canvas ref={canvasRef} className="max-w-full rounded-md shadow-xs" />
       </div>
-      <div className="w-full">
-        <button
-          onClick={downloadPng}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-750 active:scale-95 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
-        >
-          <ArrowDown className="h-3.5 w-3.5" />
-          <span>Download PNG</span>
-        </button>
-      </div>
-    </div>
+
+      <p className="text-[10px] text-muted-foreground truncate w-full px-1" title={item.payload}>
+        {item.payload}
+      </p>
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={downloadPng}
+        className="w-full gap-1.5 font-bold text-xs"
+      >
+        <ArrowDown className="h-3.5 w-3.5" />
+        <span>PNG</span>
+      </Button>
+    </Card>
   );
 }
 
@@ -1803,40 +1810,41 @@ function App() {
 
                     {activeTab === 'wifi' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Wi-Fi Connection Details</h3>
+                        <h3 className="font-bold text-base text-foreground">Wi-Fi Connection Details</h3>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Network Name / SSID</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Network Name / SSID</label>
+                            <Input
                               type="text"
                               value={wifiSsid}
                               onChange={(e) => setWifiSsid(e.target.value)}
                               placeholder="HomeWifi"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Security Encryption Type</label>
-                            <select
-                              value={wifiType}
-                              onChange={(e) => setWifiType(e.target.value)}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
-                            >
-                              <option value="WPA">WPA/WPA2</option>
-                              <option value="WEP">WEP</option>
-                              <option value="nopass">None / Unsecured</option>
-                            </select>
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Security Encryption Type</label>
+                            <Select value={wifiType} onValueChange={(v) => setWifiType(v)}>
+                              <SelectTrigger className="text-xs font-semibold bg-background border-input">
+                                <SelectValue placeholder="Select type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="WPA">WPA/WPA2</SelectItem>
+                                <SelectItem value="WEP">WEP</SelectItem>
+                                <SelectItem value="nopass">None / Unsecured</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
                         {wifiType !== 'nopass' && (
-                          <div className="space-y-2 transition-all duration-300">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Network Password</label>
-                            <input
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Network Password</label>
+                            <Input
                               type="password"
                               value={wifiPass}
                               onChange={(e) => setWifiPass(e.target.value)}
                               placeholder="••••••••"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         )}
@@ -1845,68 +1853,68 @@ function App() {
 
                     {activeTab === 'vcard' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">vCard Contact File Details</h3>
+                        <h3 className="font-bold text-base text-foreground">vCard Contact File Details</h3>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Contact Full Name</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Contact Full Name</label>
+                            <Input
                               type="text"
                               value={cardName}
                               onChange={(e) => setCardName(e.target.value)}
                               placeholder="Alex Carter"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Organization / Title</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Organization / Title</label>
+                            <Input
                               type="text"
                               value={cardOrg}
                               onChange={(e) => setCardOrg(e.target.value)}
                               placeholder="3xtools Inc"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Telephone / Phone</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Telephone / Phone</label>
+                            <Input
                               type="tel"
                               value={cardPhone}
                               onChange={(e) => setCardPhone(e.target.value)}
                               placeholder="+123456789"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Email Address</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Email Address</label>
+                            <Input
                               type="email"
                               value={cardEmail}
                               onChange={(e) => setCardEmail(e.target.value)}
                               placeholder="alex@example.com"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         </div>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Website URL</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Website URL</label>
+                            <Input
                               type="url"
                               value={cardUrl}
                               onChange={(e) => setCardUrl(e.target.value)}
                               placeholder="https://example.com"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Physical Address</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Physical Address</label>
+                            <Input
                               type="text"
                               value={cardAddr}
                               onChange={(e) => setCardAddr(e.target.value)}
                               placeholder="Silicon Valley, CA"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         </div>
@@ -1915,26 +1923,26 @@ function App() {
 
                     {activeTab === 'location' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Geographic Coordinates</h3>
+                        <h3 className="font-bold text-base text-foreground">Geographic Coordinates</h3>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Latitude</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Latitude</label>
+                            <Input
                               type="text"
                               value={locLat}
                               onChange={(e) => setLocLat(e.target.value)}
                               placeholder="37.7749"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Longitude</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Longitude</label>
+                            <Input
                               type="text"
                               value={locLng}
                               onChange={(e) => setLocLng(e.target.value)}
                               placeholder="-122.4194"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         </div>
@@ -1943,44 +1951,44 @@ function App() {
 
                     {activeTab === 'event' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Event Details</h3>
+                        <h3 className="font-bold text-base text-foreground">Event Details</h3>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Event Title</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Event Title</label>
+                            <Input
                               type="text"
                               value={evtTitle}
                               onChange={(e) => setEvtTitle(e.target.value)}
                               placeholder="Product Launch"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Location / Venue</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Location / Venue</label>
+                            <Input
                               type="text"
                               value={evtLoc}
                               onChange={(e) => setEvtLoc(e.target.value)}
                               placeholder="San Francisco, CA"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Start Time (UTC)</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Start Time (UTC)</label>
+                            <Input
                               type="datetime-local"
                               value={evtStart}
                               onChange={(e) => setEvtStart(e.target.value)}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">End Time (UTC)</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">End Time (UTC)</label>
+                            <Input
                               type="datetime-local"
                               value={evtEnd}
                               onChange={(e) => setEvtEnd(e.target.value)}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         </div>
@@ -1991,128 +1999,129 @@ function App() {
                     {isBulkActive && (
                       <div className="space-y-6">
                         <div className="flex justify-between items-center pb-2">
-                          <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Bulk Payload Settings</h3>
-                          <div className="flex rounded-xl bg-slate-50 dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800 p-1">
-                            <button
+                          <h3 className="font-bold text-base text-foreground">Bulk Payload Settings</h3>
+                          <div className="flex rounded-lg bg-muted p-1 gap-1">
+                            <Button
+                              variant={bulkInputMode === 'text' ? 'default' : 'ghost'}
+                              size="sm"
                               onClick={() => setBulkInputMode('text')}
-                              className={`px-4 py-2 text-xs font-bold rounded-lg cursor-pointer transition-all ${bulkInputMode === 'text'
-                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
-                                : 'text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
-                                }`}
+                              className="text-xs font-bold"
                             >
                               Line-by-Line List
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant={bulkInputMode === 'csv' ? 'default' : 'ghost'}
+                              size="sm"
                               onClick={() => setBulkInputMode('csv')}
-                              className={`px-4 py-2 text-xs font-bold rounded-lg cursor-pointer transition-all ${bulkInputMode === 'csv'
-                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
-                                : 'text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
-                                }`}
+                              className="text-xs font-bold"
                             >
                               CSV File Upload
-                            </button>
+                            </Button>
                           </div>
                         </div>
 
                         {bulkInputMode === 'text' ? (
                           <div className="space-y-4">
                             <div className="space-y-2">
-                              <label className="text-xs font-bold text-slate-400 uppercase block pl-1">QR List (One payload per line)</label>
+                              <label className="text-xs font-bold text-muted-foreground uppercase block">QR List (One payload per line)</label>
                               <textarea
                                 value={bulkTextList}
                                 onChange={(e) => setBulkTextList(e.target.value)}
                                 placeholder="https://example1.com&#10;https://example2.com&#10;Product 3 Text Payload"
                                 rows={6}
-                                className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all resize-none"
+                                className="w-full rounded-md border border-input bg-background text-foreground p-3 text-xs outline-none focus:ring-1 focus:ring-ring resize-none"
                               />
                             </div>
                             <div className="space-y-2 max-w-sm">
-                              <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Default file prefix</label>
-                              <input
+                              <label className="text-xs font-bold text-muted-foreground uppercase block">Default file prefix</label>
+                              <Input
                                 type="text"
                                 value={bulkDefaultPrefix}
                                 onChange={(e) => setBulkDefaultPrefix(e.target.value)}
                                 placeholder="bulk-qr"
-                                className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 text-sm outline-none transition-all"
+                                className="bg-background border border-input text-xs"
                               />
                             </div>
                           </div>
                         ) : (
                           <div className="space-y-6">
-                            <div className="border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-3xl p-8 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all cursor-pointer flex flex-col items-center justify-center text-center relative bg-slate-50/20 dark:bg-zinc-950/20">
+                            <div className="border-2 border-dashed border-border rounded-xl p-8 hover:border-primary transition-all cursor-pointer flex flex-col items-center justify-center text-center relative bg-muted/20">
                               <input
                                 type="file"
                                 accept=".csv"
                                 onChange={handleCsvUpload}
                                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                               />
-                              <Upload className="h-10 w-10 text-slate-400 mb-3" />
-                              <h4 className="text-sm font-bold text-slate-700 dark:text-zinc-250">
+                              <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                              <h4 className="text-sm font-bold text-foreground">
                                 {bulkCsvFilename ? `Selected: ${bulkCsvFilename}` : 'Upload your CSV File'}
                               </h4>
-                              <p className="text-[11px] text-slate-400 mt-1 max-w-xs leading-normal">
+                              <p className="text-xs text-muted-foreground mt-1 max-w-xs leading-normal">
                                 Drag and drop your file or click anywhere inside to browse.
                               </p>
                             </div>
 
                             {bulkCsvData.length > 0 && (
-                              <div className="grid sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100 dark:border-zinc-800/40 animate-fade-in">
+                              <div className="grid sm:grid-cols-4 gap-4 pt-4 border-t border-border">
                                 <div className="space-y-2">
-                                  <label className="text-xs font-bold text-slate-400 uppercase block pl-1">QR Data Column</label>
-                                  <select
-                                    value={bulkQrCol}
-                                    onChange={(e) => setBulkQrCol(parseInt(e.target.value, 10))}
-                                    className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 text-xs outline-none"
-                                  >
-                                    {bulkHeaders.map((header, i) => (
-                                      <option key={i} value={i}>
-                                        Col {i + 1}: {header}
-                                      </option>
-                                    ))}
-                                  </select>
+                                  <label className="text-xs font-bold text-muted-foreground uppercase block">QR Data Column</label>
+                                  <Select value={String(bulkQrCol)} onValueChange={(v) => setBulkQrCol(parseInt(v, 10))}>
+                                    <SelectTrigger className="text-xs font-semibold bg-background border-input">
+                                      <SelectValue placeholder="Select column" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {bulkHeaders.map((header, i) => (
+                                        <SelectItem key={i} value={String(i)}>
+                                          Col {i + 1}: {header}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                 </div>
 
                                 <div className="space-y-2">
-                                  <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Label/Filename Column</label>
-                                  <select
-                                    value={bulkLabelCol}
-                                    onChange={(e) => setBulkLabelCol(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 text-xs outline-none"
-                                  >
-                                    <option value="none">Auto-increment (Prefix + Count)</option>
-                                    {bulkHeaders.map((header, i) => (
-                                      <option key={i} value={i}>
-                                        Col {i + 1}: {header}
-                                      </option>
-                                    ))}
-                                  </select>
+                                  <label className="text-xs font-bold text-muted-foreground uppercase block">Label/Filename Column</label>
+                                  <Select value={String(bulkLabelCol)} onValueChange={(v) => setBulkLabelCol(v)}>
+                                    <SelectTrigger className="text-xs font-semibold bg-background border-input">
+                                      <SelectValue placeholder="Select column" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="none">Auto-increment (Prefix + Count)</SelectItem>
+                                      {bulkHeaders.map((header, i) => (
+                                        <SelectItem key={i} value={String(i)}>
+                                          Col {i + 1}: {header}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                 </div>
 
                                 <div className="space-y-2">
-                                  <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Frame Text Column</label>
-                                  <select
-                                    value={bulkFrameTextCol}
-                                    onChange={(e) => setBulkFrameTextCol(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 text-xs outline-none"
-                                  >
-                                    <option value="none">Global Default ({frameText})</option>
-                                    {bulkHeaders.map((header, i) => (
-                                      <option key={i} value={i}>
-                                        Col {i + 1}: {header}
-                                      </option>
-                                    ))}
-                                  </select>
+                                  <label className="text-xs font-bold text-muted-foreground uppercase block">Frame Text Column</label>
+                                  <Select value={String(bulkFrameTextCol)} onValueChange={(v) => setBulkFrameTextCol(v)}>
+                                    <SelectTrigger className="text-xs font-semibold bg-background border-input">
+                                      <SelectValue placeholder="Select column" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="none">Global Default ({frameText})</SelectItem>
+                                      {bulkHeaders.map((header, i) => (
+                                        <SelectItem key={i} value={String(i)}>
+                                          Col {i + 1}: {header}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                 </div>
 
                                 <div className="space-y-2">
-                                  <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Prefix (If Auto-increment)</label>
-                                  <input
+                                  <label className="text-xs font-bold text-muted-foreground uppercase block">Prefix (If Auto-increment)</label>
+                                  <Input
                                     type="text"
                                     value={bulkDefaultPrefix}
                                     onChange={(e) => setBulkDefaultPrefix(e.target.value)}
                                     placeholder="bulk-qr"
                                     disabled={bulkLabelCol !== 'none'}
-                                    className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 text-xs outline-none disabled:opacity-50"
+                                    className="bg-background border border-input text-xs"
                                   />
                                 </div>
                               </div>
@@ -2120,23 +2129,24 @@ function App() {
                           </div>
                         )}
 
-                        <div className="pt-4 flex flex-wrap gap-4">
-                          <button
+                        <div className="pt-4 flex flex-wrap gap-3">
+                          <Button
                             onClick={generateBulkQRs}
-                            className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-750 active:scale-95 text-white font-bold text-sm transition-all cursor-pointer shadow-md flex items-center gap-2"
+                            className="gap-2 font-bold text-xs"
                           >
-                            <QrCode className="h-4.5 w-4.5" />
+                            <QrCode className="h-4 w-4" />
                             <span>Generate Bulk QR Codes</span>
-                          </button>
+                          </Button>
 
                           {bulkItems.length > 0 && (
-                            <button
+                            <Button
+                              variant="secondary"
                               onClick={downloadAllPngsZip}
-                              className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-sm transition-all cursor-pointer shadow-md flex items-center gap-2"
+                              className="gap-2 font-bold text-xs"
                             >
-                              <Archive className="h-4.5 w-4.5" />
+                              <Archive className="h-4 w-4" />
                               <span>Download All QRs (.ZIP)</span>
-                            </button>
+                            </Button>
                           )}
                         </div>
                       </div>
@@ -2146,610 +2156,562 @@ function App() {
                   </Card>
 
                   {/* 3. Custom Frames Configuration Panel */}
-                  <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-zinc-800/50">
-                      <div className="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                        <Layout className="h-4.5 w-4.5" />
+                  <Card className="border-border bg-card shadow-sm">
+                    <CardHeader className="flex flex-row items-center gap-3 pb-4 border-b border-border">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Layout className="h-4 w-4" />
                       </div>
-                      <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">Choose Frame Wrapper</h2>
-                    </div>
+                      <CardTitle className="text-xl font-extrabold text-foreground">Choose Frame Wrapper</CardTitle>
+                    </CardHeader>
 
-                    {/* Grid of Frames mockups */}
-                    <div className="grid grid-cols-3 sm:grid-cols-9 gap-3">
+                    <CardContent className="pt-6 space-y-6">
+                      {/* Grid of Frames mockups with restored visual mini diagrams */}
+                      <div className="grid grid-cols-3 sm:grid-cols-9 gap-3">
 
-                      {/* No Frame */}
-                      <button
-                        onClick={() => setFrameStyle('no-frame')}
-                        className={`aspect-square border-2 rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'no-frame'
-                          ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
-                          : 'border-border hover:border-muted-foreground/30 text-muted-foreground'
-                          }`}
-                        title="No Frame"
-                      >
-                        <span className="text-xl mb-1.5 text-slate-400 select-none">✕</span>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">No Frame</span>
-                      </button>
+                        {/* No Frame */}
+                        <button
+                          onClick={() => setFrameStyle('no-frame')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'no-frame'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="No Frame"
+                        >
+                          <span className="text-lg font-bold mb-1">✕</span>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">No Frame</span>
+                        </button>
 
-                      {/* Bottom Banner */}
-                      <button
-                        onClick={() => setFrameStyle('bottom-banner')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'bottom-banner'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Bot Banner"
-                      >
-                        <div className="w-8 h-8 border border-current rounded-md relative flex items-end justify-center mb-1">
-                          <div className="w-full h-2.5 bg-current rounded-b-[2px]"></div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Bot Banner</span>
-                      </button>
-
-                      {/* Top Banner */}
-                      <button
-                        onClick={() => setFrameStyle('top-banner')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'top-banner'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Top Banner"
-                      >
-                        <div className="w-8 h-8 border border-current rounded-md relative flex items-start justify-center mb-1">
-                          <div className="w-full h-2.5 bg-current rounded-t-[2px]"></div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Top Banner</span>
-                      </button>
-
-                      {/* Bottom Accent */}
-                      <button
-                        onClick={() => setFrameStyle('bottom-accent')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'bottom-accent'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Accents"
-                      >
-                        <div className="w-8 h-8 relative flex flex-col items-center justify-end mb-1">
-                          <div className="w-6 h-0.5 bg-current"></div>
-                          <div className="flex justify-between w-6 mt-0.5">
-                            <div className="w-1 h-1 bg-current rotate-45"></div>
-                            <div className="w-1 h-1 bg-current rotate-45"></div>
+                        {/* Bottom Banner */}
+                        <button
+                          onClick={() => setFrameStyle('bottom-banner')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'bottom-banner'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Bot Banner"
+                        >
+                          <div className="w-7 h-7 border border-current rounded-md relative flex items-end justify-center mb-1">
+                            <div className="w-full h-2 bg-current rounded-b-[2px]"></div>
                           </div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Accents</span>
-                      </button>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Bot Banner</span>
+                        </button>
 
-                      {/* Borders frame */}
-                      <button
-                        onClick={() => setFrameStyle('border-banner')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'border-banner'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Borders"
-                      >
-                        <div className="w-8 h-8 border-2 border-current rounded-md relative flex items-end justify-center mb-1 p-0.5">
-                          <div className="w-full h-2 bg-current rounded-xs"></div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Borders</span>
-                      </button>
-
-                      {/* Ribbon Bottom */}
-                      <button
-                        onClick={() => setFrameStyle('ribbon-bottom')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'ribbon-bottom'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Ribbon Bot"
-                      >
-                        <div className="w-8 h-8 relative flex flex-col items-center justify-end mb-1">
-                          <div className="w-5 h-2.5 bg-current relative flex items-center justify-between">
-                            <div className="w-1 h-2 bg-slate-300 dark:bg-zinc-700 absolute left-[-3px] rotate-45"></div>
-                            <div className="w-1 h-2 bg-slate-300 dark:bg-zinc-700 absolute right-[-3px] -rotate-45"></div>
+                        {/* Top Banner */}
+                        <button
+                          onClick={() => setFrameStyle('top-banner')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'top-banner'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Top Banner"
+                        >
+                          <div className="w-7 h-7 border border-current rounded-md relative flex items-start justify-center mb-1">
+                            <div className="w-full h-2 bg-current rounded-t-[2px]"></div>
                           </div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Ribbon Bot</span>
-                      </button>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Top Banner</span>
+                        </button>
 
-                      {/* Ribbon Top */}
-                      <button
-                        onClick={() => setFrameStyle('ribbon-top')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'ribbon-top'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Ribbon Top"
-                      >
-                        <div className="w-8 h-8 relative flex flex-col items-center justify-start mb-1">
-                          <div className="w-5 h-2.5 bg-current relative flex items-center justify-between">
-                            <div className="w-1 h-2 bg-slate-300 dark:bg-zinc-700 absolute left-[-3px] rotate-45"></div>
-                            <div className="w-1 h-2 bg-slate-300 dark:bg-zinc-700 absolute right-[-3px] -rotate-45"></div>
+                        {/* Bottom Accent */}
+                        <button
+                          onClick={() => setFrameStyle('bottom-accent')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'bottom-accent'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Accents"
+                        >
+                          <div className="w-7 h-7 relative flex flex-col items-center justify-end mb-1">
+                            <div className="w-5 h-0.5 bg-current"></div>
+                            <div className="flex justify-between w-5 mt-0.5">
+                              <div className="w-1 h-1 bg-current rotate-45"></div>
+                              <div className="w-1 h-1 bg-current rotate-45"></div>
+                            </div>
                           </div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Ribbon Top</span>
-                      </button>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Accents</span>
+                        </button>
 
-                      {/* Smartphone mockup */}
-                      <button
-                        onClick={() => setFrameStyle('phone-mockup')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'phone-mockup'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Phone"
-                      >
-                        <div className="w-5 h-8 border-2 border-current rounded-lg relative flex flex-col items-center justify-between mb-1 py-0.5">
-                          <div className="w-2 h-0.5 bg-current rounded-full"></div>
-                          <div className="w-3.5 h-4.5 bg-slate-100 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded-xs"></div>
-                          <div className="w-2 h-0.5 bg-current rounded-full"></div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Phone</span>
-                      </button>
-
-                      {/* Clapperboard */}
-                      <button
-                        onClick={() => setFrameStyle('clapperboard')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'clapperboard'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
-                          }`}
-                        title="Cinema"
-                      >
-                        <div className="w-8 h-8 border border-current rounded-md relative flex flex-col items-center justify-start mb-1 overflow-hidden">
-                          <div className="w-full h-2.5 bg-current flex justify-between px-0.5 py-0.5">
-                            <span className="w-0.5 h-1.5 bg-white rotate-12"></span>
-                            <span className="w-0.5 h-1.5 bg-white rotate-12"></span>
-                            <span className="w-0.5 h-1.5 bg-white rotate-12"></span>
+                        {/* Borders frame */}
+                        <button
+                          onClick={() => setFrameStyle('border-banner')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'border-banner'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Borders"
+                        >
+                          <div className="w-7 h-7 border-2 border-current rounded-md relative flex items-end justify-center mb-1 p-0.5">
+                            <div className="w-full h-1.5 bg-current rounded-xs"></div>
                           </div>
-                          <div className="w-full h-full bg-slate-300 dark:bg-zinc-700 opacity-0"></div>
-                        </div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Cinema</span>
-                      </button>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Borders</span>
+                        </button>
 
-                    </div>
-
-                    {/* Frame Settings Inputs */}
-                    {frameStyle !== 'no-frame' && (
-                      <div className="pt-6 border-t border-slate-150 dark:border-zinc-800/50 grid sm:grid-cols-2 gap-6 transition-all duration-300">
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Frame label</label>
-                            <input
-                              type="text"
-                              value={frameText}
-                              onChange={(e) => setFrameText(e.target.value)}
-                              placeholder="SCAN ME"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
-                            />
+                        {/* Ribbon Bottom */}
+                        <button
+                          onClick={() => setFrameStyle('ribbon-bottom')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'ribbon-bottom'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Ribbon Bot"
+                        >
+                          <div className="w-7 h-7 relative flex flex-col items-center justify-end mb-1">
+                            <div className="w-5 h-2 bg-current relative flex items-center justify-between">
+                              <div className="w-1 h-1.5 bg-muted-foreground/50 absolute left-[-2px] rotate-45"></div>
+                              <div className="w-1 h-1.5 bg-muted-foreground/50 absolute right-[-2px] -rotate-45"></div>
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">
-                              Text Size (<span className="text-slate-600 dark:text-zinc-300">{frameTextSize}%</span>)
-                            </label>
-                            <input
-                              type="range"
-                              min="50"
-                              max="150"
-                              value={frameTextSize}
-                              onChange={(e) => setFrameTextSize(parseInt(e.target.value, 10))}
-                              className="w-full h-1.5 bg-slate-200 dark:bg-zinc-850 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                            />
-                          </div>
-                        </div>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Ribbon Bot</span>
+                        </button>
 
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Label font</label>
-                            <select
-                              value={frameFont}
-                              onChange={(e) => setFrameFont(e.target.value)}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
-                            >
-                              <option value="Outfit">Outfit (Default)</option>
-                              <option value="AbrilFatface">Abril Fatface (Elegant Bold)</option>
-                              <option value="Inter">Inter (Clean Sans)</option>
-                              <option value="Montserrat">Montserrat (Geometric)</option>
-                              <option value="Playfair">Playfair Display (Classy Serif)</option>
-                            </select>
+                        {/* Ribbon Top */}
+                        <button
+                          onClick={() => setFrameStyle('ribbon-top')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'ribbon-top'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Ribbon Top"
+                        >
+                          <div className="w-7 h-7 relative flex flex-col items-center justify-start mb-1">
+                            <div className="w-5 h-2 bg-current relative flex items-center justify-between">
+                              <div className="w-1 h-1.5 bg-muted-foreground/50 absolute left-[-2px] rotate-45"></div>
+                              <div className="w-1 h-1.5 bg-muted-foreground/50 absolute right-[-2px] -rotate-45"></div>
+                            </div>
                           </div>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Ribbon Top</span>
+                        </button>
 
-                          <div className="space-y-3 pt-1.5">
-                            <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
-                              <Checkbox
-                                checked={customFrameColor}
-                                onCheckedChange={(c) => setCustomFrameColor(Boolean(c))}
+                        {/* Smartphone mockup */}
+                        <button
+                          onClick={() => setFrameStyle('phone-mockup')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'phone-mockup'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Phone"
+                        >
+                          <div className="w-5 h-7 border-2 border-current rounded-md relative flex flex-col items-center justify-between mb-1 py-0.5">
+                            <div className="w-2 h-0.5 bg-current rounded-full"></div>
+                            <div className="w-3 h-3 bg-muted border border-border rounded-xs"></div>
+                            <div className="w-1.5 h-0.5 bg-current rounded-full"></div>
+                          </div>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Phone</span>
+                        </button>
+
+                        {/* Clapperboard */}
+                        <button
+                          onClick={() => setFrameStyle('clapperboard')}
+                          className={`aspect-square border rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'clapperboard'
+                            ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                            : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground'
+                            }`}
+                          title="Cinema"
+                        >
+                          <div className="w-7 h-7 border border-current rounded-md relative flex flex-col items-center justify-start mb-1 overflow-hidden">
+                            <div className="w-full h-2 bg-current flex justify-between px-0.5 py-0.5">
+                              <span className="w-0.5 h-1 bg-background rotate-12"></span>
+                              <span className="w-0.5 h-1 bg-background rotate-12"></span>
+                              <span className="w-0.5 h-1 bg-background rotate-12"></span>
+                            </div>
+                          </div>
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Cinema</span>
+                        </button>
+
+                      </div>
+
+                      {/* Frame Settings Inputs */}
+                      {frameStyle !== 'no-frame' && (
+                        <div className="pt-6 border-t border-border grid sm:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-muted-foreground uppercase block">Frame label</label>
+                              <Input
+                                type="text"
+                                value={frameText}
+                                onChange={(e) => setFrameText(e.target.value)}
+                                placeholder="SCAN ME"
+                                className="bg-background border border-input text-xs"
                               />
-                              <span className="text-xs font-bold uppercase tracking-wider">Custom frame color</span>
-                            </label>
-                            {customFrameColor && (
-                              <div className="flex items-center gap-3 transition-all duration-300">
-                                <Input
-                                  type="color"
-                                  value={frameColor}
-                                  onChange={(e) => setFrameColor(e.target.value)}
-                                  className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-muted-foreground uppercase block">
+                                Text Size ({frameTextSize}%)
+                              </label>
+                              <Slider
+                                value={[frameTextSize]}
+                                min={50}
+                                max={150}
+                                step={1}
+                                onValueChange={(vals) => setFrameTextSize(vals[0])}
+                                className="py-2"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-muted-foreground uppercase block">Label font</label>
+                              <Select value={frameFont} onValueChange={(v) => setFrameFont(v)}>
+                                <SelectTrigger className="text-xs font-semibold bg-background border-input">
+                                  <SelectValue placeholder="Select font" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Outfit">Outfit (Default)</SelectItem>
+                                  <SelectItem value="AbrilFatface">Abril Fatface (Elegant Bold)</SelectItem>
+                                  <SelectItem value="Inter">Inter (Clean Sans)</SelectItem>
+                                  <SelectItem value="Montserrat">Montserrat (Geometric)</SelectItem>
+                                  <SelectItem value="Playfair">Playfair Display (Classy Serif)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-3 pt-1.5">
+                              <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                                <Checkbox
+                                  checked={customFrameColor}
+                                  onCheckedChange={(c) => setCustomFrameColor(Boolean(c))}
                                 />
-                                <Input
-                                  type="text"
+                                <span className="text-xs font-bold uppercase tracking-wider">Custom frame color</span>
+                              </label>
+                              {customFrameColor && (
+                                <ColorPicker
                                   value={frameColor}
-                                  onChange={(e) => setFrameColor(e.target.value)}
-                                  className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
+                                  onChange={setFrameColor}
                                 />
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </CardContent>
+                  </Card>
 
                   {/* 4. Custom Patterns & Markers Panel */}
-                  <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-8">
 
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-zinc-800/50">
-                      <div className="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                        <QrCode className="h-4.5 w-4.5" />
+                  {/* 4. Custom Patterns & Markers Panel */}
+                  <Card className="border-border bg-card shadow-sm">
+                    <CardHeader className="flex flex-row items-center gap-3 pb-4 border-b border-border">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <QrCode className="h-4 w-4" />
                       </div>
-                      <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">Pattern & Eyes</h2>
-                    </div>
+                      <CardTitle className="text-xl font-extrabold text-foreground">Pattern & Eyes</CardTitle>
+                    </CardHeader>
 
-                    {/* 4.1 Pixel Pattern (Graphical SVGs with Labels) */}
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Foreground Pattern Style</h3>
-                        <p className="text-[11px] text-slate-400">Choose the shape style for foreground data modules</p>
+                    <CardContent className="pt-6 space-y-8">
+                      {/* 4.1 Pixel Pattern */}
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="font-bold text-sm text-foreground">Foreground Pattern Style</h3>
+                          <p className="text-xs text-muted-foreground">Choose the shape style for foreground data modules</p>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {patternsList.map((pat) => (
+                            <button
+                              key={pat.id}
+                              onClick={() => setPattern(pat.id)}
+                              className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${pattern === pat.id
+                                ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                                : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
+                                }`}
+                              title={pat.label}
+                            >
+                              <div className="shrink-0">{pat.svg}</div>
+                              <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{pat.label}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-3">
-                        {patternsList.map((pat) => (
-                          <button
-                            key={pat.id}
-                            onClick={() => setPattern(pat.id)}
-                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${pattern === pat.id
-                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
-                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
-                              }`}
-                            title={pat.label}
-                          >
-                            <div className="shrink-0">{pat.svg}</div>
-                            <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{pat.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* 4.2 Eye Border Style (Graphical SVGs with Labels) */}
-                    <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-zinc-800/50">
-                      <div>
-                        <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Eye Border Style</h3>
-                        <p className="text-[11px] text-slate-400">Customize the outer frame of the corner locator markers</p>
+                      {/* 4.2 Eye Border Style */}
+                      <div className="space-y-4 pt-4 border-t border-border">
+                        <div>
+                          <h3 className="font-bold text-sm text-foreground">Eye Border Style</h3>
+                          <p className="text-xs text-muted-foreground">Customize the outer frame of the corner locator markers</p>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {eyeStylesList.map((eye) => (
+                            <button
+                              key={eye.id}
+                              onClick={() => setEyeStyle(eye.id)}
+                              className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeStyle === eye.id
+                                ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                                : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
+                                }`}
+                              title={eye.label}
+                            >
+                              <div className="shrink-0">{eye.svg}</div>
+                              <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{eye.label}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-3">
-                        {eyeStylesList.map((eye) => (
-                          <button
-                            key={eye.id}
-                            onClick={() => setEyeStyle(eye.id)}
-                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeStyle === eye.id
-                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
-                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
-                              }`}
-                            title={eye.label}
-                          >
-                            <div className="shrink-0">{eye.svg}</div>
-                            <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{eye.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* 4.3 Eye Pupil Style (Graphical SVGs with Labels) */}
-                    <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-zinc-800/50">
-                      <div>
-                        <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Eye Center Style</h3>
-                        <p className="text-[11px] text-slate-400">Customize the inner pupil dot of the corner locator markers</p>
+                      {/* 4.3 Eye Pupil Style */}
+                      <div className="space-y-4 pt-4 border-t border-border">
+                        <div>
+                          <h3 className="font-bold text-sm text-foreground">Eye Center Style</h3>
+                          <p className="text-xs text-muted-foreground">Customize the inner pupil dot of the corner locator markers</p>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {eyeCentersList.map((ctr) => (
+                            <button
+                              key={ctr.id}
+                              onClick={() => setEyeCenter(ctr.id)}
+                              className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeCenter === ctr.id
+                                ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                                : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
+                                }`}
+                              title={ctr.label}
+                            >
+                              <div className="shrink-0">{ctr.svg}</div>
+                              <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{ctr.label}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-3">
-                        {eyeCentersList.map((ctr) => (
-                          <button
-                            key={ctr.id}
-                            onClick={() => setEyeCenter(ctr.id)}
-                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeCenter === ctr.id
-                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
-                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
-                              }`}
-                            title={ctr.label}
-                          >
-                            <div className="shrink-0">{ctr.svg}</div>
-                            <span className="text-[9px] font-bold uppercase tracking-wider select-none truncate max-w-full px-1">{ctr.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* 4.4 Custom Marker Colors */}
-                    <div className="pt-6 border-t border-border grid sm:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
-                          <Checkbox
-                            checked={customMarkerColor}
-                            onCheckedChange={(c) => setCustomMarkerColor(Boolean(c))}
-                          />
-                          <span className="text-xs font-bold uppercase tracking-wider">Custom eye border color</span>
-                        </label>
-                        {customMarkerColor && (
-                          <div className="flex items-center gap-3 transition-all duration-300">
-                            <Input
-                              type="color"
+                      {/* 4.4 Custom Marker Colors */}
+                      <div className="pt-6 border-t border-border grid sm:grid-cols-2 gap-6">
+                        <div className="space-y-3">
+                          <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                            <Checkbox
+                              checked={customMarkerColor}
+                              onCheckedChange={(c) => setCustomMarkerColor(Boolean(c))}
+                            />
+                            <span className="text-xs font-bold uppercase tracking-wider">Custom eye border color</span>
+                          </label>
+                          {customMarkerColor && (
+                            <ColorPicker
                               value={markerBorderColor}
-                              onChange={(e) => setMarkerBorderColor(e.target.value)}
-                              className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
+                              onChange={setMarkerBorderColor}
                             />
-                            <Input
-                              type="text"
-                              value={markerBorderColor}
-                              onChange={(e) => setMarkerBorderColor(e.target.value)}
-                              className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
-                            />
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
 
-                      <div className="space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
-                          <Checkbox
-                            checked={customCenterColor}
-                            onCheckedChange={(c) => setCustomCenterColor(Boolean(c))}
-                          />
-                          <span className="text-xs font-bold uppercase tracking-wider">Custom eye center color</span>
-                        </label>
-                        {customCenterColor && (
-                          <div className="flex items-center gap-3 transition-all duration-300">
-                            <Input
-                              type="color"
-                              value={markerCenterColor}
-                              onChange={(e) => setMarkerCenterColor(e.target.value)}
-                              className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
+                        <div className="space-y-3">
+                          <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                            <Checkbox
+                              checked={customCenterColor}
+                              onCheckedChange={(c) => setCustomCenterColor(Boolean(c))}
                             />
-                            <Input
-                              type="text"
+                            <span className="text-xs font-bold uppercase tracking-wider">Custom eye center color</span>
+                          </label>
+                          {customCenterColor && (
+                            <ColorPicker
                               value={markerCenterColor}
-                              onChange={(e) => setMarkerCenterColor(e.target.value)}
-                              className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
+                              onChange={setMarkerCenterColor}
                             />
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
-
-                  </div>
+                    </CardContent>
+                  </Card>
 
                   {/* 5. Color Palette panel */}
-                  <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-zinc-800/50">
-                      <div className="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                        <Palette className="h-4.5 w-4.5" />
+                  <Card className="border-border bg-card shadow-sm">
+                    <CardHeader className="flex flex-row items-center gap-3 pb-4 border-b border-border">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Palette className="h-4 w-4" />
                       </div>
-                      <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">Color Palette & Sizing</h2>
-                    </div>
+                      <CardTitle className="text-xl font-extrabold text-foreground">Color Palette & Sizing</CardTitle>
+                    </CardHeader>
 
-                    <div className="grid sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Foreground / QR Color</label>
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="color"
-                            value={fgColor}
-                            onChange={(e) => setFgColor(e.target.value)}
-                            className="h-10 w-10 border-0 p-0 rounded-xl cursor-pointer bg-transparent"
-                          />
-                          <input
-                            type="text"
-                            value={fgColor}
-                            onChange={(e) => setFgColor(e.target.value)}
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 outline-none transition-all text-sm"
-                          />
-                        </div>
-                      </div>
+                    <CardContent className="pt-6 space-y-6">
+                      <div className="grid sm:grid-cols-2 gap-6">
+                        <ColorPicker
+                          label="Foreground / QR Color"
+                          value={fgColor}
+                          onChange={setFgColor}
+                        />
 
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Background Color</label>
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="color"
-                            value={bgColor}
-                            onChange={(e) => setBgColor(e.target.value)}
-                            className="h-10 w-10 border-0 p-0 rounded-xl cursor-pointer bg-transparent"
-                          />
-                          <input
-                            type="text"
-                            value={bgColor}
-                            onChange={(e) => setBgColor(e.target.value)}
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3 outline-none transition-all text-sm"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-6 pt-6 mt-6 border-t border-slate-100 dark:border-zinc-800/50">
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-400 uppercase block pl-1">
-                          Margin / Quiet Zone Size (<span className="text-slate-600 dark:text-zinc-300">{margin}</span>)
-                        </label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="6"
-                          value={margin}
-                          onChange={(e) => setMargin(parseInt(e.target.value, 10))}
-                          className="w-full h-1.5 bg-slate-200 dark:bg-zinc-850 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                        <ColorPicker
+                          label="Background Color"
+                          value={bgColor}
+                          onChange={setBgColor}
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Error Correction Capability</label>
-                        <div className="grid grid-cols-4 gap-2">
-                          {['L', 'M', 'Q', 'H'].map((lvl) => {
-                            const labelMap = { L: 'L (7%)', M: 'M (15%)', Q: 'Q (25%)', H: 'H (30%)' };
-                            const isSelected = ecLevel === lvl;
-                            return (
-                              <button
-                                key={lvl}
-                                onClick={() => setEcLevel(lvl)}
-                                className={`py-2.5 text-xs font-semibold rounded-xl border transition-all duration-200 cursor-pointer ${isSelected
-                                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm'
-                                  : 'bg-slate-50 dark:bg-zinc-950/50 border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-350 hover:bg-slate-100 dark:hover:bg-zinc-900'
-                                  }`}
-                              >
-                                {labelMap[lvl]}
-                              </button>
-                            );
-                          })}
+                      <div className="grid sm:grid-cols-2 gap-6 pt-6 mt-6 border-t border-border">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-muted-foreground uppercase block">
+                            Margin / Quiet Zone Size ({margin})
+                          </label>
+                          <Slider
+                            value={[margin]}
+                            min={0}
+                            max={6}
+                            step={1}
+                            onValueChange={(vals) => setMargin(vals[0])}
+                            className="py-2"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-muted-foreground uppercase block">Error Correction Capability</label>
+                          <div className="grid grid-cols-4 gap-2">
+                            {['L', 'M', 'Q', 'H'].map((lvl) => {
+                              const labelMap = { L: 'L (7%)', M: 'M (15%)', Q: 'Q (25%)', H: 'H (30%)' };
+                              const isSelected = ecLevel === lvl;
+                              return (
+                                <Button
+                                  key={lvl}
+                                  variant={isSelected ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => setEcLevel(lvl)}
+                                  className="text-xs font-semibold"
+                                >
+                                  {labelMap[lvl]}
+                                </Button>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </CardContent>
+                  </Card>
 
-                  </div>
-
-                  {/* 6. Dynamic Previews Gallery (Visible only when bulk items generated) */}
+                  {/* 6. Dynamic Previews Gallery */}
                   {isBulkActive && bulkItems.length > 0 && (
-                    <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 animate-fade-in">
-
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 dark:border-zinc-800/50 gap-4">
+                    <Card className="border-border bg-card shadow-sm">
+                      <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-border gap-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                            <Layers className="h-4.5 w-4.5" />
+                          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                            <Layers className="h-4 w-4" />
                           </div>
                           <div>
-                            <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">Generated Bulk Gallery</h2>
-                            <p className="text-xs text-slate-400">Showing {startBulkIdx + 1} - {Math.min(startBulkIdx + itemsPerPage, bulkItems.length)} of {bulkItems.length} codes</p>
+                            <CardTitle className="text-xl font-extrabold text-foreground">Generated Bulk Gallery</CardTitle>
+                            <p className="text-xs text-muted-foreground">Showing {startBulkIdx + 1} - {Math.min(startBulkIdx + itemsPerPage, bulkItems.length)} of {bulkItems.length} codes</p>
                           </div>
                         </div>
 
-                        <button
+                        <Button
+                          variant="secondary"
                           onClick={downloadAllPngsZip}
-                          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold transition-all cursor-pointer shadow-md"
+                          className="gap-2 font-bold text-xs"
                         >
                           <Archive className="h-4 w-4" />
                           <span>Download All QRs (.ZIP)</span>
-                        </button>
-                      </div>
+                        </Button>
+                      </CardHeader>
 
-                      {/* Paginated Cards Grid (Passing down frames properties!) */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {paginatedBulkItems.map((item, i) => (
-                          <BulkQrCard
-                            key={startBulkIdx + i}
-                            item={item}
-                            index={startBulkIdx + i}
-                            bgColor={bgColor}
-                            fgColor={fgColor}
-                            margin={margin}
-                            ecLevel={ecLevel}
-                            pattern={pattern}
-                            eyeStyle={eyeStyle}
-                            eyeCenter={eyeCenter}
-                            customMarkerColor={customMarkerColor}
-                            markerBorderColor={markerBorderColor}
-                            customCenterColor={customCenterColor}
-                            markerCenterColor={markerCenterColor}
-                            frameStyle={frameStyle}
-                            frameText={frameText}
-                            frameFont={frameFont}
-                            frameTextSize={frameTextSize}
-                            customFrameColor={customFrameColor}
-                            frameColor={frameColor}
-                            frameTextColor={frameTextColor}
-                            onDownloadSuccess={() => setShowCoffeeModal(true)}
-                          />
-                        ))}
-                      </div>
-                      {/* Pagination Controls */}
-                      {totalBulkPages > 1 && (
-                        <div className="flex items-center justify-center gap-3 pt-6 border-t border-slate-100 dark:border-zinc-800/40">
-                          <button
-                            onClick={() => setBulkPage(Math.max(1, bulkPage - 1))}
-                            disabled={bulkPage === 1}
-                            className="p-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:scale-100 active:scale-95 cursor-pointer transition-all"
-                          >
-                            <ChevronLeft className="h-4.5 w-4.5" />
-                          </button>
-
-                          <span className="text-xs font-bold text-slate-500 dark:text-zinc-400 select-none">
-                            Page {bulkPage} of {totalBulkPages}
-                          </span>
-
-                          <button
-                            onClick={() => setBulkPage(Math.min(totalBulkPages, bulkPage + 1))}
-                            disabled={bulkPage === totalBulkPages}
-                            className="p-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:scale-100 active:scale-95 cursor-pointer transition-all"
-                          >
-                            <ChevronRight className="h-4.5 w-4.5" />
-                          </button>
+                      <CardContent className="pt-6 space-y-6">
+                        {/* Paginated Cards Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                          {paginatedBulkItems.map((item, i) => (
+                            <BulkQrCard
+                              key={startBulkIdx + i}
+                              item={item}
+                              index={startBulkIdx + i}
+                              bgColor={bgColor}
+                              fgColor={fgColor}
+                              margin={margin}
+                              ecLevel={ecLevel}
+                              pattern={pattern}
+                              eyeStyle={eyeStyle}
+                              eyeCenter={eyeCenter}
+                              customMarkerColor={customMarkerColor}
+                              markerBorderColor={markerBorderColor}
+                              customCenterColor={customCenterColor}
+                              markerCenterColor={markerCenterColor}
+                              frameStyle={frameStyle}
+                              frameText={frameText}
+                              frameFont={frameFont}
+                              frameTextSize={frameTextSize}
+                              customFrameColor={customFrameColor}
+                              frameColor={frameColor}
+                              frameTextColor={frameTextColor}
+                              onDownloadSuccess={() => setShowCoffeeModal(true)}
+                            />
+                          ))}
                         </div>
-                      )}
-                    </div>
+                        {/* Pagination Controls */}
+                        {totalBulkPages > 1 && (
+                          <div className="flex items-center justify-center gap-3 pt-6 border-t border-border">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setBulkPage(Math.max(1, bulkPage - 1))}
+                              disabled={bulkPage === 1}
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+
+                            <span className="text-xs font-bold text-muted-foreground select-none">
+                              Page {bulkPage} of {totalBulkPages}
+                            </span>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setBulkPage(Math.min(totalBulkPages, bulkPage + 1))}
+                              disabled={bulkPage === totalBulkPages}
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
                   )}
 
                 </div>
 
-                {/* Right Column: Live Floating Preview & Actions (Hidden in Bulk tab) */}
+                {/* Live Floating Preview Column */}
                 {!isBulkActive && (
-                  <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6 animate-fade-in">
-
-                    <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col items-center justify-between text-center relative overflow-hidden transition-all duration-300">
-
-                      <div className="w-full pb-4 mb-4.5 border-b border-slate-100 dark:border-zinc-800/50 flex items-center justify-center gap-2">
+                  <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+                    <Card className="border-border bg-card shadow-sm text-center overflow-hidden">
+                      <CardHeader className="pb-4 border-b border-border flex flex-row items-center justify-center gap-2">
                         <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
-                        <h2 className="text-lg font-bold font-outfit text-slate-900 dark:text-white">Live QR Preview</h2>
-                      </div>
+                        <CardTitle className="text-lg font-bold text-foreground">Live QR Preview</CardTitle>
+                      </CardHeader>
 
-                      <div className="p-4 bg-white rounded-3xl border border-slate-200/50 shadow-inner flex items-center justify-center max-w-full overflow-hidden relative min-h-[300px] w-full">
-                        {!qrLoaded && (
-                          <div className="absolute inset-0 bg-white/95 dark:bg-zinc-900/95 flex flex-col items-center justify-center p-6 space-y-3 z-30">
-                            <div className="h-9 w-9 rounded-full border-4 border-indigo-600/30 border-t-indigo-600 animate-spin"></div>
-                            <p className="text-xs font-bold text-slate-700 dark:text-zinc-200">Initializing Local Engine...</p>
-                          </div>
-                        )}
-                        <canvas ref={canvasRef} id="qr-canvas" className="max-w-full rounded-2xl shadow-xs transition-all duration-300"></canvas>
-                      </div>
+                      <CardContent className="pt-6 flex flex-col items-center">
+                        <div className="p-4 bg-white rounded-xl border border-border shadow-inner flex items-center justify-center max-w-full overflow-hidden relative min-h-[300px] w-full">
+                          {!qrLoaded && (
+                            <div className="absolute inset-0 bg-background/95 flex flex-col items-center justify-center p-6 space-y-3 z-30">
+                              <div className="h-8 w-8 rounded-full border-4 border-primary/30 border-t-primary animate-spin"></div>
+                              <p className="text-xs font-bold text-foreground">Initializing Local Engine...</p>
+                            </div>
+                          )}
+                          <canvas ref={canvasRef} id="qr-canvas" className="max-w-full rounded-lg shadow-xs transition-all duration-300"></canvas>
+                        </div>
 
-                      <p className="text-[10px] text-slate-400 mt-4 leading-relaxed max-w-[240px]">
-                        Generated 100% locally on your browser. Your data never leaves your device.
-                      </p>
+                        <p className="text-[11px] text-muted-foreground mt-4 leading-relaxed max-w-[240px]">
+                          Generated 100% locally on your browser. Your data never leaves your device.
+                        </p>
 
-                      <div className="grid grid-cols-2 gap-3.5 w-full mt-6">
-                        <button
-                          onClick={downloadPng}
+                        <div className="grid grid-cols-2 gap-3 w-full mt-6">
+                          <Button
+                            onClick={downloadPng}
+                            disabled={!qrLoaded}
+                            className="gap-2 font-bold text-xs"
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                            <span>PNG Image</span>
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            onClick={downloadSvg}
+                            disabled={!qrLoaded}
+                            className="gap-2 font-bold text-xs"
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                            <span>Vector SVG</span>
+                          </Button>
+                        </div>
+
+                        <Button
+                          variant="outline"
+                          onClick={printQr}
                           disabled={!qrLoaded}
-                          className="flex items-center justify-center gap-2 px-4.5 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 active:scale-95 shadow-md shadow-indigo-600/15 disabled:opacity-50 disabled:scale-100 transition-all duration-200 cursor-pointer"
+                          className="w-full gap-2 mt-3 font-bold text-xs"
                         >
-                          <ArrowDown className="h-4.5 w-4.5" />
-                          <span>PNG Image</span>
-                        </button>
-
-                        <button
-                          onClick={downloadSvg}
-                          disabled={!qrLoaded}
-                          className="flex items-center justify-center gap-2 px-4.5 py-3 rounded-2xl bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-250 font-semibold text-sm hover:bg-slate-200 dark:hover:bg-zinc-700 active:scale-95 border border-slate-200/50 dark:border-zinc-750 disabled:opacity-50 disabled:scale-100 transition-all duration-200 cursor-pointer"
-                        >
-                          <ArrowDown className="h-4.5 w-4.5" />
-                          <span>Vector SVG</span>
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={printQr}
-                        disabled={!qrLoaded}
-                        className="w-full flex items-center justify-center gap-2.5 px-4 py-3 mt-3.5 rounded-2xl border border-slate-200/70 dark:border-zinc-750 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-660 dark:text-zinc-300 font-semibold text-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:scale-100 active:scale-[0.98]"
-                      >
-                        <Printer className="h-4.5 w-4.5" />
-                        <span>Print QR Code</span>
-                      </button>
-
-                    </div>
-
+                          <Printer className="h-4 w-4" />
+                          <span>Print QR Code</span>
+                        </Button>
+                      </CardContent>
+                    </Card>
                   </div>
                 )}
 
