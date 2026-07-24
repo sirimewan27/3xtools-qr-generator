@@ -100,7 +100,7 @@ export default function Footer({
 
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
             <p>© {new Date().getFullYear()} {CONFIG.brand.logoText}. All rights reserved. 100% private local compilation.</p>
-            <p>Built with pure Shadcn UI components.</p>
+            <p>Built with {'<'} ❤️ {'>'} by Sirimewan27.</p>
           </div>
         </div>
       </footer>
