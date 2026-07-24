@@ -8,6 +8,13 @@ import CoffeeModal from './components/CoffeeModal';
 import FAQPage from './pages/FAQPage';
 import HelpPage from './pages/HelpPage';
 import ToolsPage from './pages/ToolsPage';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Link as LinkIcon,
   FileText,
@@ -1580,7 +1587,7 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-zinc-950 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col justify-between bg-background text-foreground transition-colors duration-200">
 
       <Navbar
         page={page}
@@ -1591,22 +1598,20 @@ function App() {
         setIsMobileMenuOpen={setIsMobileMenuOpen}
       />
 
-      {/* ==========================================
-          Main View Controller
-          ========================================== */}
+      {/* Main View Controller */}
       <main className="flex-grow">
 
         {/* 1. VIEW: QR Suite Generator Workspace */}
         {page === 'generator' && (
-          <section className="py-12 sm:py-20">
+          <section className="py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
               {/* Header Info */}
-              <div className="max-w-3xl mb-12 space-y-3">
-                <h2 className="font-outfit font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+              <div className="max-w-3xl mb-10 space-y-2">
+                <h2 className="font-extrabold text-3xl sm:text-4xl text-foreground tracking-tight">
                   Premium QR Code Generator
                 </h2>
-                <p className="text-sm sm:text-base text-slate-500 dark:text-zinc-400">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Build custom vector QR codes in real-time. Choose professional frames, eye patterns, and custom palettes with absolute data privacy.
                 </p>
               </div>
@@ -1614,73 +1619,73 @@ function App() {
               {/* Editor Workspace Column Grid */}
               <div className="grid lg:grid-cols-12 gap-8 items-start">
 
-                {/* Left side settings: expanded if bulk tab is chosen */}
+                {/* Left side settings */}
                 <div className={`${isBulkActive ? 'lg:col-span-12' : 'lg:col-span-8'} space-y-6`}>
 
                   {/* Category selector */}
-                  <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-5 shadow-xs transition-all">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-4.5 pl-1.5">Select QR Type</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-2.5">
-                      {tabs.map((tab) => {
-                        const Icon = tab.icon;
-                        const isActive = activeTab === tab.id;
-                        return (
-                          <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex flex-col items-center justify-center py-4 px-2.5 rounded-2xl text-xs font-semibold transition-all duration-200 cursor-pointer ${isActive
-                              ? 'bg-indigo-600 text-white shadow-sm hover:bg-indigo-750 scale-[1.02]'
-                              : 'bg-slate-50 dark:bg-zinc-950/80 hover:bg-slate-100 dark:hover:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200'
-                              }`}
-                          >
-                            <Icon className="h-5 w-5 mb-2" />
-                            {tab.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <Card className="p-5 border-border bg-card shadow-sm py-0">
+                    <CardContent className="p-0">
+                      <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-3">Select QR Type</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+                        {tabs.map((tab) => {
+                          const Icon = tab.icon;
+                          const isActive = activeTab === tab.id;
+                          return (
+                            <Button
+                              key={tab.id}
+                              variant={isActive ? "default" : "outline"}
+                              onClick={() => setActiveTab(tab.id)}
+                              className="flex flex-col items-center justify-center h-auto py-3 px-2 text-xs font-semibold"
+                            >
+                              <Icon className="h-4 w-4 mb-1.5" />
+                              {tab.label}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
 
                   {/* Input payloads Card */}
-                  <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-zinc-800/50">
-                      <div className="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                        <Sliders className="h-4.5 w-4.5" />
+                  <Card className="border-border bg-card shadow-sm">
+                    <CardHeader className="flex flex-row items-center gap-3 pb-4 border-b border-border">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Sliders className="h-4 w-4" />
                       </div>
-                      <h2 className="text-xl font-bold font-outfit text-slate-900 dark:text-white">
+                      <CardTitle className="text-xl font-extrabold text-foreground">
                         {isBulkActive ? 'Configure Bulk Generation' : 'Configure QR Content'}
-                      </h2>
-                    </div>
+                      </CardTitle>
+                    </CardHeader>
 
-                    {/* QR Form Types */}
-                    {activeTab === 'url' && (
-                      <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Link / URL Settings</h3>
-                        <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Website URL</label>
-                          <input
-                            type="url"
-                            value={url}
-                            onChange={(e) => setUrl(e.target.value)}
-                            placeholder="https://example.com"
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
-                          />
+                    <CardContent className="pt-6 space-y-6">
+                      {/* QR Form Types */}
+                      {activeTab === 'url' && (
+                        <div className="space-y-4">
+                          <h3 className="font-bold text-base text-foreground">Link / URL Settings</h3>
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Website URL</label>
+                            <Input
+                              type="url"
+                              value={url}
+                              onChange={(e) => setUrl(e.target.value)}
+                              placeholder="https://example.com"
+                              className="w-full bg-background border border-input text-foreground text-xs"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
                     {activeTab === 'text' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Plain Text Settings</h3>
+                        <h3 className="font-bold text-base text-foreground">Plain Text Settings</h3>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-400 uppercase block pl-1">QR Code Text Payload</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase block">QR Code Text Payload</label>
                           <textarea
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder="Type plain text here..."
                             rows={4}
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all resize-none"
+                            className="w-full rounded-md border border-input bg-background text-foreground p-3 text-xs outline-none focus:ring-1 focus:ring-ring resize-none"
                           />
                         </div>
                       </div>
@@ -1688,37 +1693,37 @@ function App() {
 
                     {activeTab === 'email' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Email QR Configuration</h3>
+                        <h3 className="font-bold text-base text-foreground">Email QR Configuration</h3>
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Recipient Email</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Recipient Email</label>
+                            <Input
                               type="email"
                               value={emailTo}
                               onChange={(e) => setEmailTo(e.target.value)}
                               placeholder="hello@3xtools.app"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Subject</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Subject</label>
+                            <Input
                               type="text"
                               value={emailSub}
                               onChange={(e) => setEmailSub(e.target.value)}
                               placeholder="Inquiry"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Email Body</label>
+                          <label className="text-xs font-bold text-muted-foreground uppercase block">Email Body</label>
                           <textarea
                             value={emailBody}
                             onChange={(e) => setEmailBody(e.target.value)}
                             placeholder="Write message..."
                             rows={3}
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all resize-none"
+                            className="w-full rounded-md border border-input bg-background text-foreground p-3 text-xs outline-none focus:ring-1 focus:ring-ring resize-none"
                           />
                         </div>
                       </div>
@@ -1726,15 +1731,15 @@ function App() {
 
                     {activeTab === 'phone' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">Phone Configuration</h3>
+                        <h3 className="font-bold text-base text-foreground">Phone Configuration</h3>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Phone Number</label>
-                          <input
+                          <label className="text-xs font-bold text-muted-foreground uppercase block">Phone Number</label>
+                          <Input
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="+123456789"
-                            className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                            className="bg-background border border-input text-xs"
                           />
                         </div>
                       </div>
@@ -1742,26 +1747,26 @@ function App() {
 
                     {activeTab === 'sms' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">SMS Configuration</h3>
+                        <h3 className="font-bold text-base text-foreground">SMS Configuration</h3>
                         <div className="grid sm:grid-cols-1 gap-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Phone Number</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Phone Number</label>
+                            <Input
                               type="tel"
                               value={smsPhone}
                               onChange={(e) => setSmsPhone(e.target.value)}
                               placeholder="+123456789"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Message Text</label>
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Message Text</label>
                             <textarea
                               value={smsText}
                               onChange={(e) => setSmsText(e.target.value)}
                               placeholder="Type SMS body here..."
                               rows={3}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all resize-none"
+                              className="w-full rounded-md border border-input bg-background text-foreground p-3 text-xs outline-none focus:ring-1 focus:ring-ring resize-none"
                             />
                           </div>
                         </div>
@@ -1770,26 +1775,26 @@ function App() {
 
                     {activeTab === 'whatsapp' && (
                       <div className="space-y-4">
-                        <h3 className="font-outfit font-bold text-lg text-slate-800 dark:text-zinc-150">WhatsApp Settings</h3>
+                        <h3 className="font-bold text-base text-foreground">WhatsApp Settings</h3>
                         <div className="space-y-4">
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Phone Number (with Country Code)</label>
-                            <input
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Phone Number (with Country Code)</label>
+                            <Input
                               type="tel"
                               value={waPhone}
                               onChange={(e) => setWaPhone(e.target.value)}
                               placeholder="94771234567"
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all"
+                              className="bg-background border border-input text-xs"
                             />
                           </div>
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-400 uppercase block pl-1">Prefilled Text Message</label>
+                            <label className="text-xs font-bold text-muted-foreground uppercase block">Prefilled Text Message</label>
                             <textarea
                               value={waText}
                               onChange={(e) => setWaText(e.target.value)}
                               placeholder="Hello! I would like to inquire about..."
                               rows={3}
-                              className="w-full rounded-2xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-zinc-200 p-3.5 text-sm outline-none transition-all resize-none"
+                              className="w-full rounded-md border border-input bg-background text-foreground p-3 text-xs outline-none focus:ring-1 focus:ring-ring resize-none"
                             />
                           </div>
                         </div>
@@ -2137,7 +2142,8 @@ function App() {
                       </div>
                     )}
 
-                  </div>
+                    </CardContent>
+                  </Card>
 
                   {/* 3. Custom Frames Configuration Panel */}
                   <div className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/60 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
@@ -2155,9 +2161,9 @@ function App() {
                       {/* No Frame */}
                       <button
                         onClick={() => setFrameStyle('no-frame')}
-                        className={`aspect-square border-2 rounded-2xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'no-frame'
-                          ? 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-600'
-                          : 'border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500'
+                        className={`aspect-square border-2 rounded-xl flex flex-col items-center justify-center p-2 text-center transition-all duration-200 cursor-pointer ${frameStyle === 'no-frame'
+                          ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm'
+                          : 'border-border hover:border-muted-foreground/30 text-muted-foreground'
                           }`}
                         title="No Frame"
                       >
@@ -2349,29 +2355,27 @@ function App() {
                             </select>
                           </div>
 
-                          <div className="space-y-3.5 pt-1.5">
-                            <label className="flex items-center gap-3 cursor-pointer select-none text-slate-600 dark:text-zinc-400">
-                              <input
-                                type="checkbox"
+                          <div className="space-y-3 pt-1.5">
+                            <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                              <Checkbox
                                 checked={customFrameColor}
-                                onChange={(e) => setCustomFrameColor(e.target.checked)}
-                                className="rounded border-slate-300 text-indigo-605 focus:ring-indigo-500 h-4.5 w-4.5 accent-indigo-600"
+                                onCheckedChange={(c) => setCustomFrameColor(Boolean(c))}
                               />
                               <span className="text-xs font-bold uppercase tracking-wider">Custom frame color</span>
                             </label>
                             {customFrameColor && (
                               <div className="flex items-center gap-3 transition-all duration-300">
-                                <input
+                                <Input
                                   type="color"
                                   value={frameColor}
                                   onChange={(e) => setFrameColor(e.target.value)}
-                                  className="h-10 w-10 border-0 p-0 rounded-xl cursor-pointer bg-transparent"
+                                  className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
                                 />
-                                <input
+                                <Input
                                   type="text"
                                   value={frameColor}
                                   onChange={(e) => setFrameColor(e.target.value)}
-                                  className="text-sm p-2 w-28 bg-slate-50/50 dark:bg-zinc-950/50 border border-slate-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-zinc-200"
+                                  className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
                                 />
                               </div>
                             )}
@@ -2397,14 +2401,14 @@ function App() {
                         <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Foreground Pattern Style</h3>
                         <p className="text-[11px] text-slate-400">Choose the shape style for foreground data modules</p>
                       </div>
-                      <div className="flex flex-wrap gap-3.5">
+                      <div className="flex flex-wrap gap-3">
                         {patternsList.map((pat) => (
                           <button
                             key={pat.id}
                             onClick={() => setPattern(pat.id)}
-                            className={`w-20 h-20 border rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 focus:outline-none ${pattern === pat.id
-                              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/10'
-                              : 'border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-350 hover:bg-slate-105/50 dark:hover:bg-zinc-900/50'
+                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${pattern === pat.id
+                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
                               }`}
                             title={pat.label}
                           >
@@ -2421,14 +2425,14 @@ function App() {
                         <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Eye Border Style</h3>
                         <p className="text-[11px] text-slate-400">Customize the outer frame of the corner locator markers</p>
                       </div>
-                      <div className="flex flex-wrap gap-3.5">
+                      <div className="flex flex-wrap gap-3">
                         {eyeStylesList.map((eye) => (
                           <button
                             key={eye.id}
                             onClick={() => setEyeStyle(eye.id)}
-                            className={`w-20 h-20 border rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 focus:outline-none ${eyeStyle === eye.id
-                              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/10'
-                              : 'border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-350 hover:bg-slate-105/50 dark:hover:bg-zinc-900/50'
+                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeStyle === eye.id
+                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
                               }`}
                             title={eye.label}
                           >
@@ -2445,14 +2449,14 @@ function App() {
                         <h3 className="font-outfit font-bold text-slate-800 dark:text-zinc-150">Eye Center Style</h3>
                         <p className="text-[11px] text-slate-400">Customize the inner pupil dot of the corner locator markers</p>
                       </div>
-                      <div className="flex flex-wrap gap-3.5">
+                      <div className="flex flex-wrap gap-3">
                         {eyeCentersList.map((ctr) => (
                           <button
                             key={ctr.id}
                             onClick={() => setEyeCenter(ctr.id)}
-                            className={`w-20 h-20 border rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 focus:outline-none ${eyeCenter === ctr.id
-                              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/10'
-                              : 'border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-950/50 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-350 hover:bg-slate-105/50 dark:hover:bg-zinc-900/50'
+                            className={`w-20 h-20 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm focus:outline-none ${eyeCenter === ctr.id
+                              ? 'border-primary bg-primary/10 text-primary ring-2 ring-primary/20 font-bold'
+                              : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
                               }`}
                             title={ctr.label}
                           >
@@ -2464,58 +2468,54 @@ function App() {
                     </div>
 
                     {/* 4.4 Custom Marker Colors */}
-                    <div className="pt-6 border-t border-slate-100 dark:border-zinc-800/50 grid sm:grid-cols-2 gap-6">
+                    <div className="pt-6 border-t border-border grid sm:grid-cols-2 gap-6">
                       <div className="space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer select-none text-slate-600 dark:text-zinc-400">
-                          <input
-                            type="checkbox"
+                        <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                          <Checkbox
                             checked={customMarkerColor}
-                            onChange={(e) => setCustomMarkerColor(e.target.checked)}
-                            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4.5 w-4.5 accent-indigo-600"
+                            onCheckedChange={(c) => setCustomMarkerColor(Boolean(c))}
                           />
                           <span className="text-xs font-bold uppercase tracking-wider">Custom eye border color</span>
                         </label>
                         {customMarkerColor && (
                           <div className="flex items-center gap-3 transition-all duration-300">
-                            <input
+                            <Input
                               type="color"
                               value={markerBorderColor}
                               onChange={(e) => setMarkerBorderColor(e.target.value)}
-                              className="h-10 w-10 border-0 p-0 rounded-xl cursor-pointer bg-transparent"
+                              className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
                             />
-                            <input
+                            <Input
                               type="text"
                               value={markerBorderColor}
                               onChange={(e) => setMarkerBorderColor(e.target.value)}
-                              className="text-sm p-2 w-28 bg-slate-50/50 dark:bg-zinc-950/50 border border-slate-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-zinc-200"
+                              className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
                             />
                           </div>
                         )}
                       </div>
 
                       <div className="space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer select-none text-slate-600 dark:text-zinc-400">
-                          <input
-                            type="checkbox"
+                        <label className="flex items-center gap-3 cursor-pointer select-none text-foreground">
+                          <Checkbox
                             checked={customCenterColor}
-                            onChange={(e) => setCustomCenterColor(e.target.checked)}
-                            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4.5 w-4.5 accent-indigo-600"
+                            onCheckedChange={(c) => setCustomCenterColor(Boolean(c))}
                           />
                           <span className="text-xs font-bold uppercase tracking-wider">Custom eye center color</span>
                         </label>
                         {customCenterColor && (
                           <div className="flex items-center gap-3 transition-all duration-300">
-                            <input
+                            <Input
                               type="color"
                               value={markerCenterColor}
                               onChange={(e) => setMarkerCenterColor(e.target.value)}
-                              className="h-10 w-10 border-0 p-0 rounded-xl cursor-pointer bg-transparent"
+                              className="h-9 w-9 p-0 border border-input rounded-lg cursor-pointer bg-transparent"
                             />
-                            <input
+                            <Input
                               type="text"
                               value={markerCenterColor}
                               onChange={(e) => setMarkerCenterColor(e.target.value)}
-                              className="text-sm p-2 w-28 bg-slate-50/50 dark:bg-zinc-950/50 border border-slate-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-zinc-200"
+                              className="text-xs h-9 w-28 bg-background border border-input rounded-lg"
                             />
                           </div>
                         )}

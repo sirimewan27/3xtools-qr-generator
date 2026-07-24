@@ -1,95 +1,85 @@
-# 3xtools QR Suite
+# 3XTOOLS QR Code Generator 📱✨
 
-3xtools QR Suite is a private, browser-based QR code generator built with React and Vite. It lets users create styled QR codes for links, text, email, phone, SMS, WhatsApp, Wi-Fi, contact cards, locations, calendar events, and bulk datasets without sending input data to a server.
+A high-performance, 100% client-side QR Code Designer & Bulk Batch Exporter. Built with React 19, Vite, TailwindCSS, pure Shadcn UI components, and HTML5 Canvas API.
 
-## Features
+All compiling and rendering execute locally inside browser memory — zero server uploads, zero tracking, and zero royalties.
 
-- Generate QR codes entirely in the browser
-- Support for URL, text, email, phone, SMS, WhatsApp, Wi-Fi, vCard, location, calendar, and bulk QR workflows
-- Customize QR colors, margins, error correction, module patterns, finder eyes, and frame styles
-- Export QR codes as PNG or SVG
-- Bulk-generate QR codes from pasted lines or CSV data
-- Download bulk QR output as a ZIP archive
-- Light and dark theme support
-- Configurable branding, support links, default QR settings, and related tools in `src/config.js`
+---
 
-## Tech Stack
+## 📸 Screenshots
 
-- React
-- Vite
-- Tailwind CSS
-- qrcode
-- JSZip
-- Lucide React
+### QR Code Designer Workspace
+![3XTOOLS QR Code Designer](./public/screenshots/qr_designer_preview.png)
 
-## Getting Started
+### Bulk QR Batch Exporter
+![3XTOOLS Bulk QR Generator](./public/screenshots/qr_bulk_preview.png)
 
-### Requirements
+---
 
-- Node.js 20 or newer
-- npm
+## ✨ Features & Capabilities
 
-### Install
+| Feature | Description |
+|---------|-------------|
+| **🔗 7 QR Code Types** | Generate QR codes for Website URLs, Plain Text, Email (To, Subject, Body), Phone Calls, SMS Messages, WhatsApp Direct Chat, and Wi-Fi Access Points (WPA/WPA2/WEP/Open). |
+| **🎨 Custom Module Patterns** | Choose from 10+ module shapes including Squares, Dots, Small Dots, Rounded, Diamonds, Hearts, Stars, Liquid, Horizontal Lines, and Vertical Lines. |
+| **👁️ Eye Border & Pupil Customization** | Customize outer locator borders (Squares, Rounded, Circle, Leaf, Shield, Flower) and inner pupils (Dots, Leaves, Diamonds, Hearts, Stars, Plus). |
+| **🖼️ Frame Wrappers** | Wrap QR codes with custom CTA banners ("SCAN ME", "CONNECT WI-FI", "DRINK & ENJOY"), bottom accents, ribbon frames, clapperboards, or smartphone mockups with custom font styles & colors. |
+| **🎨 Color Palette Controls** | Full background & foreground color picker with support for independent eye border & pupil colors. |
+| **📦 Bulk Batch Generation** | Upload `.csv` files or paste data line-by-line. Map payload data and custom filenames, render batch previews, and download all generated QR codes as a `.zip` archive. |
+| **💾 Export Formats** | High-resolution PNG image download & loss-free vector SVG export. |
+
+---
+
+## 🛡️ Privacy & Security Architecture
+
+- **100% Client-Side**: No backend API server or cloud upload required.
+- **Offline Capable**: Works completely offline once loaded.
+- **Zero Data Collection**: No cookies, tracking scripts, or external analytics.
+
+---
+
+## 🛠️ Tech Stack & Design System
+
+- **Framework**: React 19 + Vite 8
+- **UI Components**: Pure Shadcn UI (`Button`, `Card`, `Input`, `Select`, `Badge`, `Progress`, `Checkbox`, `Dialog`, `Slider`, `Separator`, `Tooltip`)
+- **Styling**: Tailwind CSS v4 + Vanilla CSS Design Tokens
+- **QR Engine**: `qrcode` (Payload matrix calculation) + Canvas API (Vector & pixel rendering)
+- **Archive Engine**: `jszip` (Bulk batch packaging)
+- **Icons**: Lucide React
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or pnpm
+
+### Installation
 
 ```bash
+# Clone repository
+git clone https://github.com/your-username/qr-code-generator.git
+
+# Navigate to project directory
+cd "qr code generator"
+
+# Install dependencies
 npm install
-```
 
-### Run Locally
-
-```bash
+# Start local dev server
 npm run dev
 ```
 
-Open the local URL printed by Vite in your browser.
-
-### Build
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-The production build is written to `dist/`.
+---
 
-### Preview Production Build
+## 📄 License
 
-```bash
-npm run preview
-```
-
-### Lint
-
-```bash
-npm run lint
-```
-
-## Configuration
-
-Most app-level settings live in `src/config.js`:
-
-- Brand name and tagline
-- Support email and donation link
-- Theme colors
-- Default QR options
-- Bulk generator settings
-- Related tool links
-
-## Privacy
-
-QR generation and CSV processing run locally in the user's browser. The app does not need a backend to generate or export QR codes.
-
-## Releasing on GitHub
-
-This project is ready to publish as an open-source GitHub repository under the GNU General Public License v3.0 or later.
-
-Recommended release checklist:
-
-1. Confirm `LICENSE` is present in the repository root.
-2. Update repository description, topics, and homepage URL on GitHub.
-3. Run `npm run lint` and `npm run build`.
-4. Commit the release files.
-5. Create a GitHub release tag such as `v1.0.0`.
-
-## License
-
-This project is licensed under the GNU General Public License v3.0 or later. See [LICENSE](LICENSE) for details.
+MIT License © 2026 3XTOOLS.

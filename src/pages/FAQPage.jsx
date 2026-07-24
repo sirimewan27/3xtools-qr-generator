@@ -1,4 +1,5 @@
 import { FileQuestion, Plus } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const FAQS_DATA = [
   {
@@ -32,13 +33,13 @@ export default function FAQPage({
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3.5">
-          <div className="mx-auto h-12 w-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+          <div className="mx-auto h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
             <FileQuestion className="h-6 w-6" />
           </div>
-          <h2 className="font-outfit font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight">
+          <h2 className="font-extrabold text-3xl sm:text-4xl text-foreground tracking-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-sm sm:text-base text-slate-500 dark:text-zinc-400 leading-normal">
+          <p className="text-sm sm:text-base text-muted-foreground leading-normal">
             Find fast answers to common questions about generating, customizing, and printing your custom QR codes.
           </p>
         </div>
@@ -48,26 +49,26 @@ export default function FAQPage({
           {FAQS_DATA.map((faq, index) => {
             const isExpanded = expandedFaqIndex === index;
             return (
-              <div
+              <Card
                 key={index}
-                className="bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800 rounded-2xl overflow-hidden transition-all shadow-xs"
+                className="overflow-hidden border border-border shadow-sm py-0"
               >
                 <button
                   onClick={() => setExpandedFaqIndex(isExpanded ? null : index)}
-                  className="w-full flex items-center justify-between p-5 text-left font-bold text-slate-800 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-900/50 cursor-pointer focus:outline-none transition-all"
+                  className="w-full flex items-center justify-between p-5 text-left font-bold text-foreground hover:bg-muted/50 cursor-pointer focus:outline-none transition-all"
                 >
                   <span className="text-sm sm:text-base">{faq.q}</span>
-                  <div className={`h-6 w-6 rounded-lg bg-slate-100 dark:bg-zinc-800 flex items-center justify-center transition-all ${isExpanded ? 'rotate-45 text-red-500' : 'text-slate-500'}`}>
+                  <div className={`h-6 w-6 rounded-lg bg-muted flex items-center justify-center transition-all ${isExpanded ? 'rotate-45 text-destructive' : 'text-muted-foreground'}`}>
                     <Plus className="h-4 w-4" />
                   </div>
                 </button>
 
                 {isExpanded && (
-                  <div className="p-5 pt-0 border-t border-slate-100 dark:border-zinc-800/30 text-xs sm:text-sm text-slate-500 dark:text-zinc-400 leading-relaxed animate-fade-in">
+                  <CardContent className="p-5 pt-0 border-t border-border text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     {faq.a}
-                  </div>
+                  </CardContent>
                 )}
-              </div>
+              </Card>
             );
           })}
         </div>
