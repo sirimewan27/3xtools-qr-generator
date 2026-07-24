@@ -1630,9 +1630,15 @@ function App() {
                 <div className={`${isBulkActive ? 'lg:col-span-12' : 'lg:col-span-8'} space-y-6`}>
 
                   {/* Category selector */}
-                  <Card className="p-5 border-border bg-card shadow-sm py-0">
-                    <CardContent className="p-0">
-                      <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-3">Select QR Type</label>
+                  <Card className="border-border bg-card shadow-sm">
+                    <CardHeader className="flex flex-row items-center gap-3 pb-4 border-b border-border">
+                      <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <QrCode className="h-4 w-4" />
+                      </div>
+                      <CardTitle className="text-xl font-extrabold text-foreground">Select QR Code Type</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="pt-6">
                       <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
                         {tabs.map((tab) => {
                           const Icon = tab.icon;
